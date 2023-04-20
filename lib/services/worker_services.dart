@@ -11,6 +11,7 @@ import 'package:fortaleza/models/models.dart';
 class WorkerService extends ChangeNotifier{
 
   final String _baseUrl = 'https://grupofortalezasas.com/api';
+  final String _localUrl = 'http://192.168.0.150:3000/api';
   /** ============================================================
    * RENOVAR TOKEN /renew/worker
   =============================================================== */
@@ -259,7 +260,7 @@ class WorkerService extends ChangeNotifier{
   /** ============================================================
    * UPDATE IMAGE PERFIL WORKER
   =============================================================== */
-  Future updateImageWorker(String path) async {
+  Future<String?> updateImageWorker(String path) async {
 
     final newPictureFile = File.fromUri( Uri(path: path) );
 
@@ -268,7 +269,7 @@ class WorkerService extends ChangeNotifier{
 
     notifyListeners();
 
-    final url = Uri.parse('$_baseUrl/uploads/worker');
+    final url = Uri.parse('$_baseUrl/uploads/worker/app');
 
     final imageUploadRequest = http.MultipartRequest('PUT', url );
     imageUploadRequest.headers.addAll(headers);
@@ -282,7 +283,17 @@ class WorkerService extends ChangeNotifier{
 
     print(json.decode(resp.body));
 
-    return 'Actualizado';
+    final Map<String, dynamic> decodeResp = json.decode(resp.body);
+
+    if (decodeResp['ok'] == false) {
+      return decodeResp['msg'];
+    }
+
+    worker = Worker.fromJson(decodeResp['worker']);
+
+    notifyListeners();
+
+    return 'ok';
 
   }
 

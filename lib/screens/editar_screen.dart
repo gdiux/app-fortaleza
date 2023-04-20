@@ -1,4 +1,4 @@
-// ignore_for_file: sort_child_properties_last, prefer_const_constructors, sized_box_for_whitespace, unused_local_variable, unnecessary_null_comparison
+// ignore_for_file: sort_child_properties_last, prefer_const_constructors, sized_box_for_whitespace, unused_local_variable, unnecessary_null_comparison, unrelated_type_equality_checks, use_build_context_synchronously
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -163,7 +163,15 @@ class _UpdateImg extends StatelessWidget{
                                                 }
 
                                                                     
-                                                workerService.updateImageWorker(pickedFile.path);
+                                                final imgUp = workerService.updateImageWorker(pickedFile.path);
+
+                                                if (imgUp == 'ok') {
+                                                  Navigator.of(context, rootNavigator: true).pop('dialog');
+                                                  NotificacionServices.showSnackbar('Se actualizo la foto exitosamente!');
+                                                  return;
+                                                }
+
+                                                NotificacionServices.showSnackbar('No se actualizo la foto, intente nuevamente!');
 
                                               }, icon: Icon(Icons.camera_alt_outlined, size: 35, color: Colors.white )),
                                             ),
@@ -184,12 +192,20 @@ class _UpdateImg extends StatelessWidget{
                                                 final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery, imageQuality: 100);
                                                 
                                                 if( pickedFile == null ) {
-                                                  print('No seleccionó nada');
+                                                  NotificacionServices.showSnackbar('No selecciono ninguna foto');
                                                   return;
                                                 }
 
                                                                     
-                                                workerService.updateImageWorker(pickedFile.path);
+                                                final imgUp = workerService.updateImageWorker(pickedFile.path);
+
+                                                if (imgUp == 'ok') {
+                                                  Navigator.of(context, rootNavigator: true).pop('dialog');
+                                                  NotificacionServices.showSnackbar('Se actualizo la foto exitosamente!');
+                                                  return;
+                                                }
+
+                                                NotificacionServices.showSnackbar('No se actualizo la foto, intente nuevamente!');
 
                                               }, icon: Icon(Icons.image_outlined , size: 35, color: Colors.white )),
                                             ),

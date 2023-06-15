@@ -281,8 +281,6 @@ class WorkerService extends ChangeNotifier{
     final streamResponse = await imageUploadRequest.send();
     final resp = await http.Response.fromStream(streamResponse);
 
-    print(json.decode(resp.body));
-
     final Map<String, dynamic> decodeResp = json.decode(resp.body);
 
     if (decodeResp['ok'] == false) {
